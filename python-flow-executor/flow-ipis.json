@@ -3,10 +3,11 @@
   "IPIS_ECS_TASK": {
     "TYPE": "ECS",
     "RESOURCE": "ddl-dev-pipe1-settlement",
-    "PARAMETER": [
-      "COMMANDS=LOCK",
-      "ENVIRONMENT=ENV1:VALUE1,ENV2:VALUE2,ENV3:VALUE3"
-      ],
+    "PARAMETERFLAG":true,
+    "PARAMETER": {
+      "COMMANDS":"LOCK,Date",
+      "ENVIRONMENT":"ENV1=VALUE1,ENV2=VALUE2,ENV3=VALUE3"
+     },
     "RETRIES" : 3,
     "WAITTIME" : 10,
     "NEXTSTATE" : "GLUE_STEP_JOB1"
@@ -14,21 +15,23 @@
   "GLUE_STEP_JOB1": {
     "TYPE": "GLUE",
     "RESOURCE": "ddl-dev-pipe1-glue-job-fact-parallel",
-    "PARAMETER": [
-      "COMMANDS=LOCK",
-      "ENVIRONMENT=ENV1:VALUE1,ENV2:VALUE2,ENV3:VALUE3"
-      ],
+    "PARAMETERFLAG":true,
+    "PARAMETER": {
+      "COMMANDS":"LOCK,Date",
+      "ENVIRONMENT":"ENV1=VALUE1,ENV2=VALUE2,ENV3=VALUE3"
+     },
     "RETRIES" : 3,
     "WAITTIME" : 10,
     "NEXTSTATE" : "GLUE_STEP_JOB2"
   },
    "GLUE_STEP_JOB2": {
     "TYPE": "GLUE",
+    "PARAMETERFLAG":false,
     "RESOURCE": "ddl-dev-pipe1-glue-job-static-parallel",
-    "PARAMETER": [
-      "COMMANDS=LOCK",
-      "ENVIRONMENT=ENV1:VALUE1,ENV2:VALUE2,ENV3:VALUE3"
-      ],
+    "PARAMETER": {
+      "COMMANDS":"LOCK,Date",
+      "ENVIRONMENT":"ENV1=VALUE1,ENV2=VALUE2,ENV3=VALUE3"
+     },
     "RETRIES" : 3,
     "WAITTIME" : 10,
     "NEXTSTATE" : "REPORT_ECS_TASK"
@@ -36,10 +39,11 @@
   "REPORT_ECS_TASK": {
     "TYPE": "ECS",
     "RESOURCE": "ddl-dev-pipe1-reportingtool",
-    "PARAMETER": [
-      "COMMANDS=LOCK",
-      "ENVIRONMENT=ENV1:VALUE1,ENV2:VALUE2,ENV3:VALUE3"
-      ],
+    "PARAMETERFLAG":true,
+    "PARAMETER": {
+      "COMMANDS":"LOCK,Date",
+      "ENVIRONMENT":"ENV1=VALUE1,ENV2=VALUE2,ENV3=VALUE3"
+     },
     "RETRIES" : 3,
     "WAITTIME" : 10,
     "NEXTSTATE" : "ENDSWITHTHIS"

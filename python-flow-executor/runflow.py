@@ -13,7 +13,7 @@ import time
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.DEBUG)
 
-input_flow_file='flow-glue.json'
+input_flow_file='flow-ipis.json'
 
 runtime_environment='dev'
 
@@ -50,7 +50,8 @@ def executeFlow(flowName):
             __current_step_name__=__next_step_name__
 
 def runShell(_command_):
-    _response_code_=subprocess.call(shlex.split(_command_))
+    #_response_code_=subprocess.call(shlex.split(_command_))
+    _response_code_=0
     print("Execution shell %s",_command_)
     if _response_code_ == 0:
         return 0
@@ -65,11 +66,20 @@ def executeStep(stepName, step):
     _parameters_=step['PARAMETER']
     _retries=step['RETRIES']
     _waitime=step['WAITTIME']
+    _parameter_flag_=step['PARAMETERFLAG']
     _retry_count_=0
     _run_command_=''
     if _task_type_ == 'ECS':
         logging.info('Decoding the parameter for the ECS task execution')
-        _run_command_=stepName
+        _ecs_run_file_loc='/home/jjayabal/Autosys/lib/execute-ecs-task.sh'
+        _ecs_task_definition_='ddl-'+runtime_environment+'-'+_resource_name_
+        if _parameter_flag_ :
+            _entry_commands_=_parameters_['COMMANDS']
+            _envi_vars_=_parameters_['ENVIRONMENT']
+            _run_command_=_ecs_run_file_loc+' '+runtime_environment+' '+_ecs_task_definition_+' us-east-1 true '+_envi_vars_+' '+_entry_commands_
+        else:
+            _run_command_=_ecs_run_file_loc+' '+runtime_environment+' '+_ecs_task_definition_+' us-east-1 false'
+        
     elif _task_type_ == 'GLUE':
         logging.info('Decoding the parameter for the GLUE execution')
         _glue_run_file_loc='/home/jjayabal/Autosys/lib/execute-glue.sh'
