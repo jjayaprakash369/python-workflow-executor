@@ -13,7 +13,7 @@ import time
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.DEBUG)
 
-input_flow_file='flow-ipis.json'
+input_flow_file='flow-glue.json'
 
 runtime_environment='dev'
 
@@ -50,11 +50,12 @@ def executeFlow(flowName):
             __current_step_name__=__next_step_name__
 
 def runShell(_command_):
-    #_response_code_=subprocess.call(shlex.split('./test.sh param1 param2'))
+    _response_code_=subprocess.call(shlex.split(_command_))
     print("Execution shell %s",_command_)
-    if _command_ == 'GLUE_STEP_JOB2':
-        return 101
-    return 0
+    if _response_code_ == 0:
+        return 0
+    else:
+        return _response_code_
 
 
 def executeStep(stepName, step):
@@ -71,7 +72,10 @@ def executeStep(stepName, step):
         _run_command_=stepName
     elif _task_type_ == 'GLUE':
         logging.info('Decoding the parameter for the GLUE execution')
-        _run_command_=stepName
+        _glue_run_file_loc='/home/jjayabal/Autosys/lib/execute-glue.sh'
+        _glue_job_name_='ddl-'+runtime_environment+'-pipe1-gluejob-'+_resource_name_
+        print(_glue_job_name_)
+        _run_command_=_glue_run_file_loc+' '+runtime_environment+' '+_resource_name_+' us-east-1'
     
     
     _execution_status_=True

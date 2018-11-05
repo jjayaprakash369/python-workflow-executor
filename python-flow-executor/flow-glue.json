@@ -1,0 +1,19 @@
+{
+  "StartsWith": "GLUE_STEP_JOB1",
+  "GLUE_STEP_JOB1": {
+    "TYPE": "GLUE",
+    "RESOURCE": "TestReport",
+    "PARAMETER": "",
+    "RETRIES" : 3,
+    "WAITTIME" : 10,
+    "NEXTSTATE" : "GLUE_STEP_JOB2"
+  },
+   "GLUE_STEP_JOB2": {
+    "TYPE": "GLUE",
+    "RESOURCE": "TestReport",
+    "PARAMETER": "",
+    "RETRIES" : 3,
+    "WAITTIME" : 10,
+    "NEXTSTATE" : "ENDSWITHTHIS"
+  }
+}
